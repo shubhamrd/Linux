@@ -1,0 +1,61 @@
+# dummy_interface
+
+
+# Check out dummy modules 
+
+$ sudo lsmod | grep dummy
+
+# Enable dummy module for kernel 
+$ sudo modprobe dummy
+$ sudo lsmod | grep dummy
+dummy                  12960  0 
+
+
+# Add a dummy device 
+
+$ sudo ip link add eth10 type dummy 
+
+$ ip  addr show eth10
+
+# add a connection 
+#nmcli connection add con-name dummy type dummy ifname eth10 ipv4.addresses 192.168.1.10/24 ipv4.gateway 192.168.0.0 ipv4.dns 192.168.1.1 ipv4.method manual
+
+#nmcli con up dummy 
+#ip ad
+
+eth10: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ether 32:88:9c:7e:0d:41 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.10/24 brd 192.168.1.255 scope global noprefixroute eth10
+       valid_lft forever preferred_lft forever
+    inet6 fe80::8bf5:2b6b:11b5:b63f/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+#cat  /etc/NetworkManager/system-connections/dummy.nmconnection
+
+# remove dummy terminal 
+
+$ nmcli con down dummy 
+$ nmcli con delete dummy 
+$ sudo ip link delete eth10 type dummy
+$ sudo rmmod dummy
+
+# Second Way 
+
+# To create a dummy interface named dummy0 with static IPv4 
+
+#nmcli connection add type dummy ifname dummy0 ipv4.method manual ipv4.addresses 192.0.2.1/24 
+
+
+#nmcli connection show
+NAME            UUID                                  TYPE      DEVICE
+enp1s0          db1060e9-c164-476f-b2b5-caec62dc1b05  ethernet    ens3
+dummy-dummy0    aaf6eb56-73e5-4746-9037-eed42caa8a65  dummy    dummy0
+
+#ip ad
+ 
+ 
+ dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ether a2:52:f3:b3:3f:98 brd ff:ff:ff:ff:ff:ff
+    inet 192.0.2.1/24 brd 192.0.2.255 scope global noprefixroute dummy0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::75b4:d2f1:2586:14b/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
